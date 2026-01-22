@@ -1,8 +1,11 @@
 import React from 'react'
 import "./App.css"
+import { Navbar } from "./components/Navbar"
 
 export const App = () => {
   return (
-    <div className='text-3xl bg-[blue]'>App</div>
+    <div>
+      <Navbar/>
+    </div>
   )
 }
