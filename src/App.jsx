@@ -5,6 +5,8 @@ import { IoSearchOutline } from "react-icons/io5";
 import { FaCirclePlus } from "react-icons/fa6";
 import { collection, getDocs } from 'firebase/firestore';
 import { db } from './config/firebase';
+import { ContactCard } from './components/ContactCard';
+
 
 export const App = () => {
 
@@ -45,6 +47,7 @@ export const App = () => {
       <FaCirclePlus className='text-white text-5xl cursor-pointer ml-2' />
       </div>
      </div>
+      <ContactCard contacts = {contacts}/>
     </div>
   )
 }
