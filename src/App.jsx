@@ -1,39 +1,37 @@
   import React, { useEffect, useState } from 'react'
   import "./App.css"
   import { Navbar } from "./components/Navbar"
-  import { collection, getDocs } from 'firebase/firestore';
+  import { collection, getDocs, onSnapshot } from 'firebase/firestore';
   import { db } from './config/firebase';
   import { ContactCard } from './components/ContactCard';
   import { InputField } from './components/InputField';
 import { AddUpdateComponent } from './components/AddUpdateComponent';
+import { useDisclouser } from './hooks/useDisclouser';
 
 
   export const App = () => {
 
     const [contacts, setContacts] = useState([])
-    const [isOpen, setIsOpen] = useState(false)
+    const {isOpen, open, close} = useDisclouser()
 
-    const open = ()=>{
-      setIsOpen((prev)=>!prev)
-    }
-
-    const close = ()=>{
-      setIsOpen((prev)=>!prev)
-    }
   
     useEffect(() => {
     const fetchContacts = async () => {
       try {
-        const ref = collection(db, "contacts");
-        const snapshot = await getDocs(ref);
+        const contactsRef = collection(db, "contacts");
 
-        const contacts = snapshot.docs.map(doc => ({
+
+   onSnapshot(contactsRef, (snapShot) =>{
+           const contactLists = snapShot.docs.map(doc => ({
           id: doc.id,
           ...doc.data(),
         }));
 
-        setContacts(contacts);
-        console.log(contacts)
+        setContacts(contactLists);
+        return contactLists
+   })
+
+     
       } catch (error) {
         console.error("Failed to fetch contacts:", error);
       }
