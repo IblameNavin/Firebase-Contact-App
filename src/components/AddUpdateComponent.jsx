@@ -8,6 +8,7 @@ import {
   doc,
   updateDoc,
 } from "firebase/firestore";
+import { toast } from "react-toastify";
 
 export const AddUpdateComponent = ({
   isOpen,
@@ -19,6 +20,7 @@ export const AddUpdateComponent = ({
     try {
       const contactRef = collection(db, "contacts");
       await addDoc(contactRef, values);
+       toast.success("Added Contact Successfully")
     } catch (error) {
       console.log(error);
     }
@@ -28,6 +30,7 @@ export const AddUpdateComponent = ({
     try {
       const contactRef = doc(db, "contacts", id);
       await updateDoc(contactRef, values);
+       toast.success("Updated Contact Successfully")
     } catch (error) {
       console.log(error);
     }
