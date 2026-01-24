@@ -1,6 +1,6 @@
 import React from "react";
 import { Modal } from "./Modal";
-import { Formik, Form, Field } from "formik";
+import { Formik, Form, Field, ErrorMessage } from "formik";
 import { db } from "../config/firebase";
 import {
   collection,
@@ -9,6 +9,7 @@ import {
   updateDoc,
 } from "firebase/firestore";
 import { toast } from "react-toastify";
+import * as Yup from "yup"
 
 export const AddUpdateComponent = ({
   isOpen,
@@ -36,9 +37,14 @@ export const AddUpdateComponent = ({
     }
   };
 
+  const contactSchemaValidation = Yup.object().shape({
+    name: Yup.string().required("Name is Required"),
+    email: Yup.string().email("Invalid Email").required("Email is required")
+  })
+
   return (
     <Modal isOpen={isOpen} close={close}>
-      <Formik
+      <Formik validationSchema={contactSchemaValidation}
         enableReinitialize
         initialValues={{
           name: contact?.name || "",
@@ -63,6 +69,10 @@ export const AddUpdateComponent = ({
             />
           </div>
 
+          <div className="text-xs text-red-500">
+          <ErrorMessage name = "name"/>
+          </div>
+
           <div className="flex flex-col gap-1">
             <label htmlFor="email">Email</label>
             <Field
@@ -70,6 +80,10 @@ export const AddUpdateComponent = ({
               type="email"
               className="h-10 border"
             />
+          </div>
+
+           <div className="text-xs text-red-500">
+          <ErrorMessage name = "email"/>
           </div>
 
           <button

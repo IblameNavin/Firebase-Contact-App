@@ -7,6 +7,7 @@ import { db } from '../config/firebase';
 import { AddUpdateComponent } from './AddUpdateComponent';
 import { useDisclouser } from '../hooks/useDisclouser';
 import { toast } from 'react-toastify';
+import { NotFoundContact } from './NotFoundContact';
 
 export const ContactCard = ({contacts}) => {
 
@@ -27,7 +28,7 @@ export const ContactCard = ({contacts}) => {
   return (
     <div>
       {
-        contacts.map((contact)=>
+      contacts.length <= 0 ? <NotFoundContact/> : contacts.map((contact)=>
          <div key={contact.id} className='bg-yellow-100 flex justify-between items-center p-3 rounded-lg mt-4'>
         <div className='flex gap-2'>
             <FaRegUserCircle className='text-5xl cursor-pointer text-amber-500'/>
