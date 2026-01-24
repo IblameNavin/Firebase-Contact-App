@@ -1,9 +1,27 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { FaRegUserCircle } from "react-icons/fa";
 import { RiEditCircleLine } from 'react-icons/ri';
 import { IoMdTrash } from 'react-icons/io';
+import { doc, deleteDoc } from 'firebase/firestore';
+import { db } from '../config/firebase';
+import { AddUpdateComponent } from './AddUpdateComponent';
+import { useDisclouser } from '../hooks/useDisclouser';
 
 export const ContactCard = ({contacts}) => {
+
+        const {isOpen, close, open} = useDisclouser()
+        const [selectedContact, setSelectedContact] = useState(null)
+      
+
+  const deleteContact = async(id)=>{
+    try {
+      const contactRef = doc(db, "contacts", id)
+   await deleteDoc(contactRef) 
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   return (
     <div>
       {
@@ -17,12 +35,14 @@ export const ContactCard = ({contacts}) => {
           </div>
         </div>
           <div className='flex text-2xl gap-3'>
-            <RiEditCircleLine/>
-            <IoMdTrash className='text-amber-500'/>
+            <RiEditCircleLine onClick={()=>{
+              setSelectedContact(contact)
+               open() }}  className='cursor-pointer'/>
+            <IoMdTrash onClick={()=>deleteContact(contact.id)} className='text-amber-500 cursor-pointer'/>
           </div>
         </div>
-        )
-      }
+        )}
+        <AddUpdateComponent contact = {selectedContact} isUpdate = {!!selectedContact} isOpen={isOpen} close={close}/>
      </div>
   )
 }
